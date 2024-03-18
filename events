@@ -1,0 +1,48 @@
+/**
+PROBLEM STATEMENT: 
+Find out the employees who attended all the company events.
+**/
+
+
+drop table if exists events;
+create table events
+(
+	event_name		varchar(50),
+	emp_id			int,
+	dates			date
+);
+insert into events values('Product launch', 1, to_date('01-03-2024','DD-MM-YYYY'));
+insert into events values('Product launch', 3, to_date('01-03-2024','DD-MM-YYYY'));
+insert into events values('Product launch', 4, to_date('01-03-2024','DD-MM-YYYY'));
+insert into events values('Conference', 2, to_date('02-03-2024','DD-MM-YYYY'));
+insert into events values('Conference', 2, to_date('03-03-2024','DD-MM-YYYY'));
+insert into events values('Conference', 3, to_date('02-03-2024','DD-MM-YYYY'));
+insert into events values('Conference', 4, to_date('02-03-2024','DD-MM-YYYY'));
+insert into events values('Training', 3, to_date('04-03-2024','DD-MM-YYYY'));
+insert into events values('Training', 2, to_date('04-03-2024','DD-MM-YYYY'));
+insert into events values('Training', 4, to_date('04-03-2024','DD-MM-YYYY'));
+insert into events values('Training', 4, to_date('05-03-2024','DD-MM-YYYY'));
+
+
+create table employee_names
+(
+	id		int,
+	name	varchar(50)
+);
+
+insert into employee_names values(1, 'Lewis');
+insert into employee_names values(2, 'Max');
+insert into employee_names values(3, 'Charles');
+insert into employee_names values(4, 'Sianz');
+
+select * from events;
+select * from employee_names;
+
+--Solution
+
+select en.name as employee_name, count(distinct event_name) as no_of_events
+from events as e
+join employee_names as en on e.emp_id = en.id
+group by 1
+having count(distinct event_name) = (select count(distinct event_name) from events)
+order by 1
